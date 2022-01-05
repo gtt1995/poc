@@ -1,0 +1,66 @@
+Testcase id: 140305
+Job: duckdb_libfuzzer_ubsan
+Crash Type: Divide-by-zero
+isSecurity: False
+Crash state: bool duckdb::DoubleCastLoop<double, true>
+bool duckdb::TryDoubleCast<double>
+bool duckdb::TryCast::Operation<duckdb::string_t, double>
+Poc: 140305.testcase
+engine: libFuzzer
+fully_qualified_name: libFuzzer_parse_fuzz_test
+target: parse_fuzz_test
+name: libFuzzer
+[Environment] UBSAN_OPTIONS=exitcode=77:print_stacktrace=1
++----------------------------------------Release Build Stacktrace----------------------------------------+
+Command: /clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test -rss_limit_mb=2560 -timeout=60 -runs=100 /clusterfuzz/run_bot/clusterfuzz/bot/inputs/fuzzer-testcases/crash-23dd4d61ed22b5832d2284d2a12ff5bb4789d9bb
+Time ran: 0.025146961212158203
+
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3003851125
+INFO: Loaded 1 modules   (711609 inline 8-bit counters): 711609 [0x2c7b370, 0x2d28f29),
+INFO: Loaded 1 PC tables (711609 PCs): 711609 [0x2d28f30,0x3804ac0),
+/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test: Running 1 inputs 100 time(s) each.
+Running: /clusterfuzz/run_bot/clusterfuzz/bot/inputs/fuzzer-testcases/crash-23dd4d61ed22b5832d2284d2a12ff5bb4789d9bb
+/src/duckdb/src/common/operator/cast_operators.cpp:1064:46: runtime error: division by zero
+    #0 0xef2586 in bool duckdb::DoubleCastLoop&lt;double, true&gt;(char const*, unsigned long, double&amp;, bool) /src/duckdb/src/common/operator/cast_operators.cpp:1064:46
+    #1 0xed2bc6 in bool duckdb::TryDoubleCast&lt;double&gt;(char const*, unsigned long, double&amp;, bool) /src/duckdb/src/common/operator/cast_operators.cpp:1121:8
+    #2 0xed29d8 in bool duckdb::TryCast::Operation&lt;duckdb::string_t, double&gt;(duckdb::string_t, double&amp;, bool) /src/duckdb/src/common/operator/cast_operators.cpp:1137:9
+    #3 0x62c183 in double duckdb::Cast::Operation&lt;duckdb::string_t, double&gt;(duckdb::string_t) /src/duckdb/src/include/duckdb/common/operator/cast_operators.hpp:56:8
+    #4 0x1a50d4a in duckdb::Transformer::TransformValue(duckdb_libpgquery::PGValue) /src/duckdb/src/parser/transform/expression/transform_constant.cpp:63:22
+    #5 0x9290f6 in duckdb::Transformer::TransformSet(duckdb_libpgquery::PGNode*) /src/duckdb/src/parser/transform/statement/transform_set.cpp:47:15
+    #6 0x4cdca4 in duckdb::Transformer::TransformStatement(duckdb_libpgquery::PGNode*) /src/duckdb/src/parser/transformer.cpp:108:10
+    #7 0x4cdaf5 in duckdb::Transformer::TransformStatement(duckdb_libpgquery::PGNode*) /src/duckdb/src/parser/transformer.cpp:46:17
+    #8 0x4c1398 in duckdb::Transformer::TransformParseTree(duckdb_libpgquery::PGList*, std::__1::vector&lt;std::__1::unique_ptr&lt;duckdb::SQLStatement, std::__1::default_delete&lt;duckdb::SQLStatement&gt; &gt;, std::__1::allocator&lt;std::__1::unique_ptr&lt;duckdb::SQLStatement, std::__1::default_delete&lt;duckdb::SQLStatement&gt; &gt; &gt; &gt;&amp;) /src/duckdb/src/parser/transformer.cpp:14:15
+    #9 0x4bf877 in duckdb::Parser::ParseQuery(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt; const&amp;) /src/duckdb/src/parser/parser.cpp:37:15
+    #10 0x4b744a in LLVMFuzzerTestOneInput /src/duckdb/test/ossfuzz/parse_fuzz_test.cpp:7:10
+    #11 0x443043 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) cxa_noexception.cpp:0
+    #12 0x42e952 in fuzzer::RunOneTest(fuzzer::Fuzzer*, char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:324:6
+    #13 0x43441a in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) cxa_noexception.cpp:0
+    #14 0x45d342 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #15 0x7f3dea2cd0b2 in __libc_start_main
+    #16 0x40bbdd in _start
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior /src/duckdb/src/common/operator/cast_operators.cpp:1064:46 in
+
+
++----------------------------------------Release Build Unsymbolized Stacktrace (diff)----------------------------------------+
+
+Running: /clusterfuzz/run_bot/clusterfuzz/bot/inputs/fuzzer-testcases/crash-23dd4d61ed22b5832d2284d2a12ff5bb4789d9bb
+/src/duckdb/src/common/operator/cast_operators.cpp:1064:46: runtime error: division by zero
+    #0 0xef2586  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0xef2586)
+    #1 0xed2bc6  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0xed2bc6)
+    #2 0xed29d8  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0xed29d8)
+    #3 0x62c183  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x62c183)
+    #4 0x1a50d4a  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x1a50d4a)
+    #5 0x9290f6  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x9290f6)
+    #6 0x4cdca4  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x4cdca4)
+    #7 0x4cdaf5  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x4cdaf5)
+    #8 0x4c1398  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x4c1398)
+    #9 0x4bf877  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x4bf877)
+    #10 0x4b744a  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x4b744a)
+    #11 0x443043  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x443043)
+    #12 0x42e952  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x42e952)
+    #13 0x43441a  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x43441a)
+    #14 0x45d342  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x45d342)
+    #15 0x7f3dea2cd0b2  (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
+    #16 0x40bbdd  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/duckdb_libfuzzer_ubsan/custom/parse_fuzz_test+0x40bbdd)
