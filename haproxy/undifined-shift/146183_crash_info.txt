@@ -1,0 +1,47 @@
+Testcase id: 146183
+Job: haproxy_libfuzzer_ubsan
+Crash Type: Null-dereference
+isSecurity: False
+Crash state: readcfgfile
+fuzz_cfg_parser.c
+Poc: 146183.testcase
+engine: libFuzzer
+fully_qualified_name: libFuzzer_fuzz_cfg_parser
+target: fuzz_cfg_parser
+name: libFuzzer
+[Environment] UBSAN_OPTIONS=exitcode=77:print_stacktrace=1
++----------------------------------------Release Build Stacktrace----------------------------------------+
+Command: /clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_cfg_parser -rss_limit_mb=2560 -timeout=60 -runs=100 /clusterfuzz/run_bot/clusterfuzz/bot/inputs/fuzzer-testcases/8eae9fbd0db6d32315e04d24e086697ac5f04c74f4bbfd88e8c0a7122b7b722c
+Time ran: 0.025415420532226562
+
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 532179548
+INFO: Loaded 1 modules   (48651 inline 8-bit counters): 48651 [0x85d100, 0x868f0b),
+INFO: Loaded 1 PC tables (48651 PCs): 48651 [0x6d33d0,0x791480),
+/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_cfg_parser: Running 1 inputs 100 time(s) each.
+Running: /clusterfuzz/run_bot/clusterfuzz/bot/inputs/fuzzer-testcases/8eae9fbd0db6d32315e04d24e086697ac5f04c74f4bbfd88e8c0a7122b7b722c
+src/cfgparse.c:2134:3: runtime error: member access within null pointer of type &#x27;struct cfg_section&#x27;
+    #0 0x4ba8b3 in readcfgfile /src/haproxy/src/cfgparse.c:2134:3
+    #1 0x4b472d in LLVMFuzzerTestOneInput /src/haproxy/fuzz_cfg_parser.c:38:2
+    #2 0x4402d3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) cxa_noexception.cpp:0
+    #3 0x42bbe2 in fuzzer::RunOneTest(fuzzer::Fuzzer*, char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:324:6
+    #4 0x4316aa in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) cxa_noexception.cpp:0
+    #5 0x45a5d2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #6 0x7f9f465d00b2 in __libc_start_main
+    #7 0x408e6d in _start
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior src/cfgparse.c:2134:3 in
+
+
++----------------------------------------Release Build Unsymbolized Stacktrace (diff)----------------------------------------+
+
+Running: /clusterfuzz/run_bot/clusterfuzz/bot/inputs/fuzzer-testcases/8eae9fbd0db6d32315e04d24e086697ac5f04c74f4bbfd88e8c0a7122b7b722c
+src/cfgparse.c:2134:3: runtime error: member access within null pointer of type &#x27;struct cfg_section&#x27;
+    #0 0x4ba8b3  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_cfg_parser+0x4ba8b3)
+    #1 0x4b472d  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_cfg_parser+0x4b472d)
+    #2 0x4402d3  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_cfg_parser+0x4402d3)
+    #3 0x42bbe2  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_cfg_parser+0x42bbe2)
+    #4 0x4316aa  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_cfg_parser+0x4316aa)
+    #5 0x45a5d2  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_cfg_parser+0x45a5d2)
+    #6 0x7f9f465d00b2  (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
+    #7 0x408e6d  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_cfg_parser+0x408e6d)

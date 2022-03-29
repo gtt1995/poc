@@ -1,0 +1,50 @@
+Testcase id: 100368
+Job: haproxy_libfuzzer_ubsan
+Crash Type: Undefined-shift
+isSecurity: False
+Crash state: huff_dec
+hpack_decode_frame
+fuzz_hpack_decode.c
+Poc: 100368.testcase
+engine: libFuzzer
+fully_qualified_name: libFuzzer_fuzz_hpack_decode
+target: fuzz_hpack_decode
+name: libFuzzer
+[Environment] UBSAN_OPTIONS=exitcode=77:print_stacktrace=1
++----------------------------------------Release Build Stacktrace----------------------------------------+
+Command: /clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_hpack_decode -rss_limit_mb=2560 -timeout=60 -runs=100 /clusterfuzz/run_bot/clusterfuzz/bot/inputs/fuzzer-testcases/ff94d59348d16ab0979419216597bc6baec5aa6d44d4d8877b47c578ab71fe0b
+Time ran: 0.009743690490722656
+
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 702489740
+INFO: Loaded 1 modules   (349 inline 8-bit counters): 349 [0x5255d8, 0x525735),
+INFO: Loaded 1 PC tables (349 PCs): 349 [0x4ed490,0x4eea60),
+/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_hpack_decode: Running 1 inputs 100 time(s) each.
+Running: /clusterfuzz/run_bot/clusterfuzz/bot/inputs/fuzzer-testcases/ff94d59348d16ab0979419216597bc6baec5aa6d44d4d8877b47c578ab71fe0b
+include/../src/hpack-huff.c:1457:55: runtime error: left shift of 255 by 24 places cannot be represented in type &#x27;int&#x27;
+    #0 0x4b3a9c in huff_dec /src/haproxy/src/hpack-huff.c:1457:55
+    #1 0x4b52a2 in hpack_decode_frame /src/haproxy/src/hpack-dec.c:282:12
+    #2 0x4b6333 in LLVMFuzzerTestOneInput /src/haproxy/fuzz_hpack_decode.c:72:13
+    #3 0x43eec3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) cxa_noexception.cpp:0
+    #4 0x42a7d2 in fuzzer::RunOneTest(fuzzer::Fuzzer*, char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:324:6
+    #5 0x43029a in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) cxa_noexception.cpp:0
+    #6 0x4591c2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #7 0x7f2eda0150b2 in __libc_start_main
+    #8 0x407a5d in _start
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior include/../src/hpack-huff.c:1457:55 in
+
+
++----------------------------------------Release Build Unsymbolized Stacktrace (diff)----------------------------------------+
+
+Running: /clusterfuzz/run_bot/clusterfuzz/bot/inputs/fuzzer-testcases/ff94d59348d16ab0979419216597bc6baec5aa6d44d4d8877b47c578ab71fe0b
+include/../src/hpack-huff.c:1457:55: runtime error: left shift of 255 by 24 places cannot be represented in type &#x27;int&#x27;
+    #0 0x4b3a9c  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_hpack_decode+0x4b3a9c)
+    #1 0x4b52a2  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_hpack_decode+0x4b52a2)
+    #2 0x4b6333  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_hpack_decode+0x4b6333)
+    #3 0x43eec3  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_hpack_decode+0x43eec3)
+    #4 0x42a7d2  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_hpack_decode+0x42a7d2)
+    #5 0x43029a  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_hpack_decode+0x43029a)
+    #6 0x4591c2  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_hpack_decode+0x4591c2)
+    #7 0x7f2eda0150b2  (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
+    #8 0x407a5d  (/clusterfuzz/run_bot/clusterfuzz/bot/builds/haproxy_libfuzzer_ubsan/custom/fuzz_hpack_decode+0x407a5d)
